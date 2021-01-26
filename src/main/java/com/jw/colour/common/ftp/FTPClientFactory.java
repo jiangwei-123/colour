@@ -57,6 +57,8 @@ public class FTPClientFactory implements PoolableObjectFactory<FTPClient> {
             ftpClient.enterLocalPassiveMode();
             if (!result) {
                 LOGGER.warn("ftpClient login failed... username is {}", ftpProperties.getProperty("ftpClient_username"));
+            } else {
+                ftpClient.changeWorkingDirectory(ftpProperties.getProperty("ftpClient_workingDirectory"));
             }
 
         } catch (Exception e) {
@@ -111,12 +113,12 @@ public class FTPClientFactory implements PoolableObjectFactory<FTPClient> {
     }
 
     @Override
-    public void activateObject(FTPClient ftpClient) throws Exception {
+    public void activateObject(FTPClient ftpClient) {
 
     }
 
     @Override
-    public void passivateObject(FTPClient ftpClient) throws Exception {
+    public void passivateObject(FTPClient ftpClient) {
 
     }
 }

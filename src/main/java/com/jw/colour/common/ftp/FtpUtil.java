@@ -11,7 +11,7 @@ import java.io.*;
 import java.util.StringTokenizer;
 
 /**
- * use ftp to get files
+ * some ways to use FTP
  *
  * @author jw on 2021/1/15
  */
@@ -45,16 +45,15 @@ public class FtpUtil {
 
 
     /**
-    * Get connection object
-    * @author jw
-    * @date 2021/1/26
-    * @return: org.apache.commons.net.ftp.FTPClient
-    **/
+     * Get connection object
+     *
+     * @author jw
+     * @date 2021/1/26
+     * @return: org.apache.commons.net.ftp.FTPClient
+     **/
     public FTPClient getFTPClient() {
         try {
-            FTPClient ftpClient = ftpClientPool.borrowObject();
-            ftpClient.changeWorkingDirectory("/");
-            return ftpClient;
+            return ftpClientPool.borrowObject();
         } catch (Exception e) {
             LOGGER.error("getFTPClient", e.getCause());
             return null;
@@ -62,19 +61,24 @@ public class FtpUtil {
     }
 
     /**
-     * 当前命令执行完成命令完成
-     *
-     * @throws IOException
-     */
+    * turn back,don't need it when use pool
+    * @author jw
+    * @date 2021/1/26
+    * @param ftpClient ftpClient
+    *
+    **/
     public void complete(FTPClient ftpClient) throws IOException {
         ftpClient.completePendingCommand();
     }
 
+
     /**
-     * 当前线程任务处理完成，加入到队列的最后
-     *
-     * @return
-     */
+    * The task processing of the current thread is completed, and it is added to the last part of the queue
+    * @author jw
+    * @date 2021/1/26
+    * @param ftpClient ftpClient
+    *
+    **/
     public void disconnect(FTPClient ftpClient) {
         if (ftpClient != null) {
             try {
@@ -87,13 +91,13 @@ public class FtpUtil {
     }
 
     /**
-     * Description: 向FTP服务器上传文件
-     *
-     * @param remoteFile 上传到FTP服务器上的文件名
-     * @param input      本地文件流
-     * @return 成功返回true，否则返回false
-     * @Version1.0
-     */
+    * upload file by using inputStream
+    * @author jw
+    * @date 2021/1/26
+    * @param remoteFile remoteFile's name
+    * @param input local inputStream
+    * @return: boolean
+    **/
     public boolean uploadFile(String remoteFile, InputStream input) {
         boolean result = false;
         FTPClient ftpClient = getFTPClient();
@@ -107,7 +111,7 @@ public class FtpUtil {
                 LOGGER.error("uploadFile file {} error:{}", remoteFile, ftpClient.getReplyString());
             }
         } catch (Exception e) {
-            LOGGER.error("uploadFile  error:{}", e.getCause());
+            LOGGER.error("uploadFile  error:", e.getCause());
         } finally {
             Util.closeQuietly(input);
             disconnect(ftpClient);
@@ -115,14 +119,15 @@ public class FtpUtil {
         return result;
     }
 
+
     /**
-     * Description: 向FTP服务器上传文件
-     *
-     * @param remoteFile 上传到FTP服务器上的文件名
-     * @param localFile  本地文件
-     * @return 成功返回true，否则返回false
-     * @Version1.0
-     */
+    * upload file by using local file's name
+    * @author jw
+    * @date 2021/1/26
+    * @param remoteFile remote file's name
+    * @param localFile local file's name
+    * @return: boolean
+    **/
     public boolean uploadFile(String remoteFile, String localFile) {
         FileInputStream input = null;
         try {
@@ -134,13 +139,13 @@ public class FtpUtil {
     }
 
     /**
-     * 拷贝文件
-     *
-     * @param fromFile
-     * @param toFile
-     * @return
-     * @throws Exception
-     */
+    * copy file
+    * @author jw
+    * @date 2021/1/26
+    * @param fromFile fromFile
+    * @param toFile toFile
+    * @return: boolean
+    **/
     public boolean copyFile(String fromFile, String toFile) {
 
         InputStream in = getFileInputStream(fromFile);
@@ -162,13 +167,14 @@ public class FtpUtil {
         return flag;
     }
 
+
     /**
-     * 获取文件输入流
-     *
-     * @param fileName
-     * @return
-     * @throws IOException
-     */
+    * get inputStream from local file
+    * @author jw
+    * @date 2021/1/26
+    * @param fileName fileName
+    * @return: java.io.InputStream
+    **/
     public InputStream getFileInputStream(String fileName) {
         ByteArrayOutputStream fos = new ByteArrayOutputStream();
         FTPClient ftpClient = getFTPClient();
@@ -190,12 +196,15 @@ public class FtpUtil {
         return in;
     }
 
+
     /**
-     * Description: 从FTP服务器下载文件
-     *
-     * @return
-     * @Version1.0
-     */
+    * down file
+    * @author jw
+    * @date 2021/1/26
+    * @param remoteFile remoteFile
+    * @param localFile localFile
+    * @return: boolean
+    **/
     public boolean downFile(String remoteFile, String localFile) {
         boolean result = false;
         FTPClient ftpClient = getFTPClient();
@@ -218,12 +227,12 @@ public class FtpUtil {
     }
 
     /**
-     * 从ftp中获取文件流
-     *
-     * @param filePath
-     * @return
-     * @throws Exception
-     */
+    *
+    * @author jw
+    * @date 2021/1/26
+    * @param filePath filePath
+    * @return: java.io.InputStream
+    **/
     public InputStream getInputStream(String filePath) {
         FTPClient ftpClient = getFTPClient();
         if (ftpClient == null) {
