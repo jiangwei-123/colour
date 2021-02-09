@@ -1,21 +1,32 @@
 package com.jw.colour.models.employee.controller;
 
-import org.springframework.stereotype.Controller;
+import org.apache.catalina.connector.Response;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import static com.jw.colour.common.listener.InitPropertiesConfig.initMap;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.jw.colour.common.ecxel.ExcelUtil.downExcel;
+
 
 /**
  * employee's action
  *
  * @author jw on 2021/1/12
  */
-@Controller
+@RestController
 public class EmployeeController {
 
     @RequestMapping("/first")
-    public String first() {
-        initMap.get("local_path");
+    public String first(HttpServletRequest request, HttpServletResponse response) {
+        //initMap.get("local_path");
+        Map<String, Object> map = new HashMap<>();
+        map.put("key", "value");
+        downExcel(response, map);
         return "first";
     }
 }

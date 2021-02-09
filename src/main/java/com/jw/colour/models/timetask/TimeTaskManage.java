@@ -19,7 +19,7 @@ public class TimeTaskManage {
     @Scheduled(cron = "0/1 * * * * ?")
     public void ftp() {
         ThreadLocalRandom random = ThreadLocalRandom.current();
-        int i = random.nextInt(10000);
-        FtpUtil.getFtpUtil().uploadFile(i + ".txt", "D:\\test\\ddd.txt");
+       // int i = random.nextInt(10000);
+       // boolean b = FtpUtil.getFtpUtil().uploadFile(i + ".txt", "D:\\test\\ddd.txt");
     }
 }
