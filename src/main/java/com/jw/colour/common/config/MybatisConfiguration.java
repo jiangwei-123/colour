@@ -1,10 +1,13 @@
 package com.jw.colour.common.config;
 
 
-import com.jw.colour.models.mybatis.MyInterceptor;
+
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 
+import java.io.IOException;
 import java.util.Properties;
 
 /**
@@ -17,7 +20,12 @@ public class MybatisConfiguration {
     @Bean
     public MyInterceptor myInterceptor() {
         MyInterceptor interceptor = new MyInterceptor();
-        Properties properties = new Properties();
+        Properties properties = null;
+        try {
+            properties = PropertiesLoaderUtils.loadAllProperties("mybatis.properties");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         interceptor.setProperties(properties);
         return interceptor;
     }

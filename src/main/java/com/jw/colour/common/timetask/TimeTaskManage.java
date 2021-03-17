@@ -1,6 +1,4 @@
-package com.jw.colour.models.timetask;
-
-import com.jw.colour.common.ftp.FtpUtil;
+package com.jw.colour.common.timetask;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;

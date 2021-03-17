@@ -1,4 +1,4 @@
-package com.jw.colour.models.employee.dao;
+package com.jw.colour.models.employee.mapper;
 
 
 import org.apache.ibatis.annotations.Delete;

@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableScheduling
 @MapperScan(
-        basePackages = {"com.jw.colour.models.**.dao"},
+        basePackages = {"com.jw.colour.**.**.mapper"},
         annotationClass = Mapper.class
 )
 @SpringBootApplication

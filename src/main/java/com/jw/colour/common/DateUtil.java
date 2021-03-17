@@ -60,10 +60,10 @@ public class DateUtil {
      */
     public static String formatDateTime(long mss) {
         String dateTimes = null;
-        long days = mss / (NumConstant.N_3600 * NumConstant.N_24);
-        long hours = (mss % (NumConstant.N_3600 * NumConstant.N_24)) / (NumConstant.N_3600);
-        long minutes = (mss % (NumConstant.N_3600)) / NumConstant.N_60;
-        long seconds = mss % NumConstant.N_60;
+        long days = mss / (3600 * 24);
+        long hours = (mss % (3600 * 24)) / (3600);
+        long minutes = (mss % (3600)) / 60;
+        long seconds = mss % 60;
         if (days > 0) {
             dateTimes = days + "天" + hours + "小时" + minutes + "分钟";
 //                    + seconds + "秒";
@@ -73,7 +73,7 @@ public class DateUtil {
         } else if (minutes > 0) {
             dateTimes = minutes + "分钟";
 //                    + seconds + "秒";
-        } else if(seconds > 0) {
+        } else if (seconds > 0) {
             dateTimes = seconds + "秒";
         }
 
@@ -194,21 +194,6 @@ public class DateUtil {
         }
         return start;
     }
-//
-//    public static Date getDayEndSeconds(Date date) {
-//        Date end = null;
-//        String dateStr = DateUtil.dateToString(date, "yyyy-MM-dd");
-//        try {
-//            end = DateUtil.stringToDate(dateStr, "yyyy-MM-dd");
-//            end.setHours(NumConstant.N_23);
-//            end.setMinutes(NumConstant.N_59);
-//            end.setSeconds(NumConstant.N_59);
-//        } catch (Exception e) {
-//
-//            LOGGER.error("", e);
-//        }
-//        return end;
-//    }
 
     /**
      * 日期字符串转换为日期格式
@@ -244,101 +229,6 @@ public class DateUtil {
         }
     }
 
-//	/**
-//	 * 根据报表时间标志，取得时间段
-//	 *
-//	 * @param timeType
-//	 *            时间标志
-//	 * @return String[]
-//	 * @throws ParseException
-//	 * @throws ParseException
-//	 */
-//	@SuppressWarnings("deprecation")
-//	public static String[] time(String timeType) {
-//		try {
-//			String[] time = new String[2];
-//			Timestamp beginTime = null;
-//			Timestamp endTime = null;
-//			java.util.Date today = new java.util.Date();
-//			java.util.GregorianCalendar calendar = new java.util.GregorianCalendar();
-//			calendar.setTime(today);
-//			if ("0".equals(timeType)) {
-//				// 当天
-//				beginTime = new Timestamp(calendar.getTime().getTime());
-//				calendar.add(Calendar.DATE, 1);
-//				endTime = new Timestamp(calendar.getTime().getTime());
-//				time[0] = beginTime.toString().substring(0, 10);
-//				time[1] = endTime.toString().substring(0, 10);
-//			} else if ("1".equals(timeType)) {
-//				// 前一天
-//				calendar.add(Calendar.DATE, -1);
-//				beginTime = new Timestamp(calendar.getTime().getTime());
-//				endTime = new Timestamp(calendar.getTime().getTime());
-//				time[1] = beginTime.toString().substring(0, 10) + " 23:59:59";
-//				time[0] = endTime.toString().substring(0, 10);
-//			} else if ("2".equals(timeType)) {
-//				// 前三天
-//				calendar.add(Calendar.DATE, -1);
-//				beginTime = new Timestamp(calendar.getTime().getTime());
-//				calendar.add(Calendar.DATE, -2);
-//				endTime = new Timestamp(calendar.getTime().getTime());
-//				time[1] = beginTime.toString().substring(0, 10) + " 23:59:59";
-//				time[0] = endTime.toString().substring(0, 10);
-//			} else if ("3".equals(timeType)) {
-//				// 上一周
-//				// 获取上周一的时间
-//				int weeks = 0;
-//				weeks--;
-//				int mondayPlus = getMondayPlus();
-//				calendar.add(Calendar.DATE, mondayPlus + 7 * weeks);
-//				beginTime = new Timestamp(calendar.getTime().getTime());
-//				// 获取上周日的时间
-//				calendar.add(Calendar.DATE, 6);
-//				endTime = new Timestamp(calendar.getTime().getTime());
-//				time[0] = beginTime.toString().substring(0, 10);
-//				time[1] = endTime.toString().substring(0, 10) + " 23:59:59";
-//			} else if ("4".equals(timeType)) {
-//				// 上一月
-//				beginTime = new Timestamp(calendar.getTime().getTime());
-//				calendar.add(Calendar.MONTH, -1);
-//				beginTime = new Timestamp(calendar.getTime().getTime());
-//				time[0] = beginTime.toString().substring(0, 8) + "01";
-//				String endStr = beginTime.toString().substring(0, 5) + String.valueOf(beginTime.getMonth() + 2) + "-01";
-//				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//				try {
-//					calendar.setTime(sdf.parse(endStr));
-//				} catch (ParseException e) {
-//					LOGGER.error("",e);
-//				}
-//				calendar.add(Calendar.DATE, -1);
-//				endTime = new Timestamp(calendar.getTime().getTime());
-//				time[1] = endTime.toString().substring(0, 10) + " 23:59:59";
-//			} else if ("5".equals(timeType)) {
-//				// 上一季
-//				beginTime = new Timestamp(calendar.getTime().getTime());
-//				calendar.add(Calendar.MONTH, -3);
-//				endTime = new Timestamp(calendar.getTime().getTime());
-//				String beginTimeStr = beginTime.toString().substring(0, 8) + "01";
-//				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//				calendar.setTime(sdf.parse(beginTimeStr));
-//				calendar.add(Calendar.DATE, -1);
-//				beginTime = new Timestamp(calendar.getTime().getTime());
-//				time[1] = beginTime.toString().substring(0, 10) + " 23:59:59";
-//				time[0] = endTime.toString().substring(0, 8) + "01";
-//			} else {
-//				// 去年
-//				beginTime = new Timestamp(calendar.getTime().getTime());
-//				calendar.add(Calendar.YEAR, -1);
-//				endTime = new Timestamp(calendar.getTime().getTime());
-//				time[1] = beginTime.toString().substring(0, 5) + "01-01";
-//				time[0] = endTime.toString().substring(0, 5) + "01-01";
-//			}
-//			return time;
-//		} catch (ParseException e) {
-//			LOGGER.error("",e);
-//			return null;
-//		}
-//	}
 
     /**
      * 获取当前日期格式 yyyy-MM-dd hh:mm:ss
@@ -365,7 +255,7 @@ public class DateUtil {
         long sl = startday.getTime();
         long el = endday.getTime();
         long ei = el - sl;
-        return (int) (ei / NumConstant.N_1000);
+        return (int) (ei / 1000);
     }
 
     /**
@@ -439,7 +329,7 @@ public class DateUtil {
         if (mydate == null) {
             return 0;
         }
-        long day = (mydate.getTime() - date.getTime()) / (NumConstant.N_24 * NumConstant.N_60 * NumConstant.N_60 * NumConstant.N_1000);
+        long day = (mydate.getTime() - date.getTime()) / (24 * 60 * 60 * 1000);
         return (int) day;
     }
 
@@ -647,7 +537,7 @@ public class DateUtil {
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
-        return calendar.getTime().getTime() / NumConstant.N_1000;
+        return calendar.getTime().getTime() / 1000;
     }
 
     /**
@@ -661,13 +551,10 @@ public class DateUtil {
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
-        return calendar.getTime().getTime() / NumConstant.N_1000;
+        return calendar.getTime().getTime() / 1000;
     }
 
 
-    /*public static void main(String[] args) {
-//        System.out.println(getReduceDate(1,new Date()).getTime() / 1000);
-        System.out.println(formatDateTime(932760));
-    }*/
+
 
 }

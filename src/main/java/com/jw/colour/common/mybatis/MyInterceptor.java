@@ -1,4 +1,4 @@
-package com.jw.colour.models.mybatis;
+package com.jw.colour.common.mybatis;
 
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
@@ -7,15 +7,10 @@ import org.apache.ibatis.mapping.ParameterMapping;
 import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.session.Configuration;
-import org.apache.ibatis.session.ResultHandler;
-import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.type.TypeHandlerRegistry;
 
 import java.text.DateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * mybatis Interceptor
@@ -31,42 +26,49 @@ import java.util.Properties;
 })
 public class MyInterceptor implements Interceptor {
 
+    private Properties properties;
+    private List<String> methodList = new ArrayList<>();
+
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
         // 获取执行方法的MappedStatement参数,不管是Executor的query方法还是update方法，第一个参数都是MappedStatement
         MappedStatement mappedStatement = (MappedStatement) invocation.getArgs()[0];
-        Object parameter = null;
-        if (invocation.getArgs().length > 1) {
-            parameter = invocation.getArgs()[1];
-        }
         String sqlId = mappedStatement.getId();
-        BoundSql boundSql = mappedStatement.getBoundSql(parameter);
-        Configuration configuration = mappedStatement.getConfiguration();
+        if (methodList.contains(sqlId)) {
+            Object parameter = null;
+            if (invocation.getArgs().length > 1) {
+                parameter = invocation.getArgs()[1];
+            }
+            BoundSql boundSql = mappedStatement.getBoundSql(parameter);
+            Configuration configuration = mappedStatement.getConfiguration();
 
-        Object re = invocation.proceed();
-
-        // 打印mysql执行语句
-        String sql = getSql(configuration, boundSql, sqlId);
-        System.out.println(sql);
-        // 打印mysql执行时间
-
-
-        return re;
+            // 打印mysql执行语句
+            String sql = assembleSql(configuration, boundSql);
+            System.out.println(sql);
+        }
+        //执行结果
+        Object result = invocation.proceed();
+        return result;
     }
 
     @Override
     public Object plugin(Object target) {
+        if(!properties.getProperty("interceptor_switch").equals("on")){
+            return target;
+        }
         return Plugin.wrap(target, this);
     }
 
     @Override
     public void setProperties(Properties properties) {
-
+        this.properties = properties;
+        String interceptorMethod = properties.getProperty("interceptor_method");
+        String[] split = interceptorMethod.split(";");
+        methodList.addAll(Arrays.asList(split));
     }
 
-    private static String getSql(Configuration configuration, BoundSql boundSql, String sqlId) {
-        return sqlId + " 方法对应sql执行语句:" + assembleSql(configuration, boundSql);
-    }
+
+
 
     /**
      * 转义正则特殊字符 （$()*+.[]?\^{}

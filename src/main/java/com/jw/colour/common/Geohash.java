@@ -163,15 +163,5 @@ public class Geohash {
 		}
 		return geoHashRadius.length;
 	}
-	
-	//25路公交测试
-	public static void main(String[] args) throws Exception{
-		System.out.println("------------------------------------------");
-		String encode = new Geohash().encode(118.790707, 32.104723);
-		System.out.println(encode);
-		System.out.println(Arrays.toString(new Geohash().decode(encode)));
-		String dateToString = DateUtil.dateToString(new Date(), "HH:00");
-		System.out.println(new Date().getTime());
-	}
-	
+
 }

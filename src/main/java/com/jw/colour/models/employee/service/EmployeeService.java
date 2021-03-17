@@ -1,6 +1,6 @@
 package com.jw.colour.models.employee.service;
 
-import com.jw.colour.models.employee.dao.EmployeeMapper;
+import com.jw.colour.models.employee.mapper.EmployeeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
