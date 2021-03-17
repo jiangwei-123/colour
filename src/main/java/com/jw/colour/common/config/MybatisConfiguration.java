@@ -1,8 +1,6 @@
 package com.jw.colour.common.config;
 
-
-
-
+import com.jw.colour.common.mybatis.MyInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
